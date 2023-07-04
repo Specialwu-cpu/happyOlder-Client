@@ -22,7 +22,7 @@
 
       <el-aside width="202px" style="border: 1px solid #eee; border-top: none" >
         <div style="width: 190px;background-color: white;padding: 5px;margin: auto">
-          <img src="../assets/user.png" width="150px" height="150px" style="border-radius: 300px;margin-left: 8%">
+          <img :src="user.userPic" width="150px" height="150px" style="border-radius: 300px;margin-left: 8%">
           <br>
           <br>
           <p style="margin:0 auto;text-align: center" v-model="user.username">{{user.username}}</p>
@@ -32,11 +32,12 @@
         <br>
         <el-menu :default-openeds="['1','2']">
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-s-custom"></i>个人中心</template>
+            <template slot="title"><i class="el-icon-s-custom"></i>信息中心</template>
             <el-menu-item-group>
-              <router-link class="alink" to="/userCenter/modify"><el-menu-item index="2-1"><i class="el-icon-s-tools"></i>信息修改</el-menu-item></router-link>
-              <router-link class="alink" to="/userCenter/notes"><el-menu-item index="2-2"><i class="el-icon-tickets"></i>训练记录</el-menu-item></router-link>
-              <router-link class="alink" to="/userCenter/manage"><el-menu-item index="2-3"><i class="el-icon-monitor"></i>管理模型</el-menu-item></router-link>
+              <router-link class="alink" to="/userCenter/modifyAdmin"><el-menu-item index="2-1"><i class="el-icon-s-tools"></i>信息修改</el-menu-item></router-link>
+              <router-link class="alink" to="/userCenter/manageOlder"><el-menu-item index="2-2"><i class="el-icon-tickets"></i>老人管理</el-menu-item></router-link>
+              <router-link class="alink" to="/userCenter/manageWorker"><el-menu-item index="2-3"><i class="el-icon-monitor"></i>职工管理</el-menu-item></router-link>
+              <router-link class="alink" to="/userCenter/manageVolunteer"><el-menu-item index="2-3"><i class="el-icon-view"></i>义工管理</el-menu-item></router-link>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -75,7 +76,7 @@ export default {
   data() {
     return {
       user:{
-        userpic :"static/userpic/userpic.jpg",
+        userPic :require('../assets/user.png'),
         username: '用户'
       },
       navList:[

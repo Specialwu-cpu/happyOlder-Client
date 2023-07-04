@@ -48,7 +48,7 @@
                   <el-upload
                     class="upload-demo"
                     action="/api/test/file2"
-                    accept=".csv"
+                    :accept="fileType"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :before-remove="beforeRemove"
@@ -128,6 +128,7 @@ export default {
   data() {
     return {
       fileList:[],
+      fileType:[".png",".jpg", ".bmp"],
       datas:[],
       modname:[],
       acc:[],
@@ -148,7 +149,7 @@ export default {
       change:0,
       navList:[
         {name:'/user3',navItem:'处理中心'},
-        {name:'/userCenter/modify',navItem:'个人中心'},
+        {name:'/userCenter/modifyAdmin',navItem:'个人中心'},
         {name:'/about',navItem:'关于我们'},
       ]
     }

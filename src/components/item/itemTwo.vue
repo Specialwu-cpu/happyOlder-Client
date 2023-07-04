@@ -64,13 +64,15 @@ export default {
             type: 'shadow'
           }
         },
-        // legend: {data:[0.1,0.2,0.3,0.4]},
-        // grid: {
-        //   left: '3%',
-        //   right: '4%',
-        //   bottom: '3%',
-        //   // containLabel: true
-        // },
+        legend: {
+          show: true
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          // bottom: '3%',
+          containLabel: true
+        },
         xAxis: {
           type: 'value',
           // boundaryGap: [0, 0.01]

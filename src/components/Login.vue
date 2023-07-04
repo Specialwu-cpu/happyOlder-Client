@@ -99,9 +99,9 @@ export default {
               'Content-Type':'application/json',
             },
             data:JSON.stringify(this.loginForm),
-            url:"user/login"
+            url:"http://43.143.150.4:8010/laotoule/login/"
           }).then(res => {
-            if (res.data=='0')
+            if (res.data.data==null)
               this.$message.error('密码错误，登陆失败！');
             else
             {

@@ -9,7 +9,7 @@ import '../src/components/theme/element/index.css';
 // import 'lib-flexible/flexible'
 Vue.use(ElementUI);
 Vue.prototype.$http=axios;
-axios.defaults.baseURL = '/api'
+// axios.defaults.baseURL = '/api'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

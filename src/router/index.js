@@ -4,11 +4,15 @@ import Router from 'vue-router'
 import Login from "../components/Login";
 import Register from "../components/Register";
 import UserCenter from "../components/UserCenter";
-import Manage from "../components/user/manage";
-import Modify from "../components/user/modify";
-import Notes from "../components/user/notes";
+import ModifyAdmin from "../components/user/modifyAdmin.vue";
+import ManageWorker from "../components/user/manageWorker.vue";
+import ManageOlder from "../components/user/manageOlder.vue";
+import ManageVolunteer from "../components/user/manageVolunteer.vue";
 import User3 from "../components/User3"
 import About from "../components/about";
+import ModifyOlder from "../components/user/modifyOlder.vue";
+import ModifyWorker from "../components/user/modifyWorker.vue";
+import ModifyVolunteer from "../components/user/modifyVolunteer.vue";
 Vue.use(Router)
 
 export default new Router({
@@ -38,16 +42,32 @@ export default new Router({
       component: UserCenter,
       children:[
         {
-          path: 'manage',
-          component: Manage
+          path: 'manageWorker',
+          component: ManageWorker
         },
         {
-          path: 'modify',
-          component: Modify
+          path: 'modifyAdmin',
+          component: ModifyAdmin
         },
         {
-          path: 'notes',
-          component: Notes
+          path: 'modifyOlder',
+          component: ModifyOlder
+        },
+        {
+          path: 'modifyWorker',
+          component: ModifyWorker
+        },
+        {
+          path: 'modifyVolunteer',
+          component: ModifyVolunteer
+        },
+        {
+          path: 'manageOlder',
+          component:ManageOlder
+        },
+        {
+          path: 'manageVolunteer',
+          component:ManageVolunteer
         }
       ]
     }

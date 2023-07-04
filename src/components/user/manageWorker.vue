@@ -1,4 +1,4 @@
-<template>
+manageOlder.vue<template>
   <div style="background-color:  #e4ecf5">
   <el-table
     :data="tableData_rec"
@@ -13,62 +13,43 @@
       width="80">
     </el-table-column>
     <el-table-column
-      prop="modname"
-      label="模型名"
+      prop="name"
+      label="姓名"
       sortable
       width="100">
     </el-table-column>
     <el-table-column
-      prop="acc"
-      label="正确率"
+      prop="age"
+      label="年龄"
       sortable
       width="170">
     </el-table-column>
     <el-table-column
-      prop="trp"
-      label="trp"
+      prop="shenFen"
+      label="身份证号"
       width="170">
     </el-table-column>
     <el-table-column
-      prop="size"
-      label="大小"
+      prop="birthDay"
+      label="生日"
       width="60">
     </el-table-column>
     <el-table-column
-      prop="ppv"
-      label="ppv"
-      width="170">
-    </el-table-column>
-    <el-table-column
-      prop="fn"
-      label="fn"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="tn"
-      label="tn"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="fp"
-      label="fp"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="tp"
-      label="tp"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="f1"
-      label="f1"
+      prop="address"
+      label="家庭住址"
       width="170">
     </el-table-column>
     <el-table-column
       fixed="right"
       label="操作"
-      width="80">
+      width="160">
       <template slot-scope="scope">
+        <el-button
+          @click="modifyWorker"
+          type="text"
+          size="small">
+          修改
+        </el-button>
         <el-button
           @click.native.prevent="deleteRow(scope.$index, tableData_rec)"
           type="text"
@@ -86,6 +67,9 @@ import axios from "axios";
 
 export default {
   methods: {
+    modifyWorker(){
+      this.$router.push({path:"/userCenter/modifyWorker", query: {id:"1"}})
+    },
     deleteRow(index, rows) {
       let id = rows[index].id
       this.$http.post("/user/delTrain", {id}).then((res) => {
@@ -95,15 +79,17 @@ export default {
   },
   created() {
     var _this = this
-    axios({
-      method:"get",
-      headers:{
-        'Content-Type':'application/json',
-      },
-      url:"/user/getTrain"
-    }).then((res)=>{
-      _this.tableData_rec=res.data;
-    })
+    _this.tableData_rec = [{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1},{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1}]
+    // axios({
+    //   method:"get",
+    //   headers:{
+    //     'Content-Type':'application/json',
+    //   },
+    //   url:"/user/getTrain"
+    // }).then((res)=>{
+    //   _this.tableData_rec = [{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1},{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1}]
+    //   // _this.tableData_rec=res.data;
+    // })
   },
   data() {
     return {
