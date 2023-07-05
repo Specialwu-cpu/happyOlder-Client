@@ -14,6 +14,9 @@ import ModifyOlder from "../components/user/modifyOlder.vue";
 import ModifyWorker from "../components/user/modifyWorker.vue";
 import ModifyVolunteer from "../components/user/modifyVolunteer.vue";
 import AddOlder from "../components/user/addOlder.vue";
+import addVolunteer from "../components/user/addVolunteer.vue";
+import AddVolunteer from "../components/user/addVolunteer.vue";
+import AddWorker from "../components/user/addWorker.vue";
 Vue.use(Router)
 
 export default new Router({
@@ -43,6 +46,10 @@ export default new Router({
       component: UserCenter,
       children:[
         {
+          path: 'modifyAdmin',
+          component: ModifyAdmin
+        },
+        {
           path: 'manageOlder',
           component:ManageOlder
         },
@@ -59,21 +66,25 @@ export default new Router({
           component: ManageWorker
         },
         {
-          path: 'modifyAdmin',
-          component: ModifyAdmin
-        },
-        {
           path: 'modifyWorker',
           component: ModifyWorker
+        },
+        {
+          path: 'addWorker',
+          component: AddWorker
+        },
+        {
+          path: 'manageVolunteer',
+          component:ManageVolunteer
         },
         {
           path: 'modifyVolunteer',
           component: ModifyVolunteer
         },
         {
-          path: 'manageVolunteer',
-          component:ManageVolunteer
-        }
+          path: 'addVolunteer',
+          component: AddVolunteer
+        },
       ]
     }
   ]

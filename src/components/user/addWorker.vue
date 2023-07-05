@@ -1,12 +1,9 @@
 <template>
   <el-form style="margin-top:50px" label-width="10px" :label-position="labelPosition" ref="LoginFormRef" :model="user"  class="login_form">
-    <el-form-item  label="编号" prop="id">
-      <el-input :disabled="true" style="width: 500px" placeholder=编号 v-model="user.id" prefix-icon="el-icon-user"></el-input>
-    </el-form-item>
     <el-form-item label="个人信息" prop="password">
       <div>
         <label for="name">真实姓名:</label>
-        <el-input id="name" style="width: 400px" placeholder="真实姓名" v-model="user.name" prefix-icon="el-icon-lock"></el-input>
+        <el-input id="name" style="width: 400px" placeholder="真实姓名" v-model="user.username" prefix-icon="el-icon-lock"></el-input>
       </div>
       <div>
         <label for="gender">性别:</label>
@@ -32,20 +29,20 @@
         ></el-date-picker>
       </div>
       <div>
-        <label for="checkin_date">访问日期:</label>
+        <label for="checkin_date">受聘日期:</label>
         <el-date-picker
           style="width: 350px"
           id="checkin_date"
-          v-model="user.checkin_date"
+          v-model="user.hire_date"
           type="date"
           placeholder="Select date"
           @change="handleDateChange"
         ></el-date-picker>
-        <label for="checkout_date">离开日期:</label>
+        <label for="checkout_date">离职日期:</label>
         <el-date-picker
           style="width: 350px"
           id="checkout_date"
-          v-model="user.checkout_date"
+          v-model="user.resign_date"
           type="date"
           placeholder="Select date"
           @change="handleDateChange"
@@ -66,38 +63,20 @@
 import axios from "axios";
 
 export default {
-  created() {
-    this.user.id=this.$route.query.id;
-    let url = 'http://43.143.150.4:8010/volunteer/get/'+ this.user.id.toString()+'/'
-    console.log(url)
-    axios({
-      method:"get",
-      headers:{
-        'Content-Type':'application/json',
-      },
-      url:url
-    }).then((res)=>{
-      this.user=res.data.volunteer;
-    })
-  },
   data() {
     return {
       labelPosition: 'top',
       user:{
         id:'',
-        name:'',
+        username:'',
         gender:'',
         phone: '',
         id_card:'',
         birthday:'',
-        checkin_date:'',
-        checkout_date:'',
+        hire_date:'',
+        resign_date:'2200-01-01',
         DESCRIPTION:'',
       },
-      newUser:{
-        username: '',
-        password:''
-      }
     }
   },
   methods:{
@@ -105,27 +84,24 @@ export default {
       if(!this.isValid()){
         return;
       }
-      let url = "http://43.143.150.4:8010/volunteer/update/"+this.user['id'].toString()+'/'
-      console.log(url)
-      console.log(JSON.stringify(this.user))
-        axios({
-          method:"put",
-          headers:{
-            'Content-Type':'application/json',
-          },
-          data:JSON.stringify(this.user),
-          url:url
-        }).then(res => {
-          {
-            this.$message({
-              message: '修改成功！',
-              type: 'success'
-            });
-          }
-        })
+      let url = "http://43.143.150.4:8010/employee/create/"
+      axios({
+        method:"post",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        data:JSON.stringify(this.user),
+        url:url
+      }).then(res => {
+        console.log(res);
+        this.$message({
+          message: '添加成功！',
+          type: 'success'
+        });
+      })
     },
     isValid(){
-      if(this.user.name==="" || this.user.name== null){
+      if(this.user.username==="" || this.user.username== null){
         this.$message({
           message: '姓名必须填写！',
           type: 'error'
@@ -139,9 +115,9 @@ export default {
         });
         return false;
       }
-      if(this.user.checkin_date === "" || this.user.checkin_date== null){
+      if(this.user.hire_date === "" || this.user.hire_date== null){
         this.$message({
-          message: '访问日期必须填写！',
+          message: '受聘日期必须填写！',
           type: 'error'
         });
         return false;

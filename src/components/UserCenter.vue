@@ -63,15 +63,15 @@ export default {
   name: "Space",
   created() {
     var _this = this
-    axios({
-      method:"get",
-      headers:{
-        'Content-Type':'application/json',
-      },
-      url:"user/getUsername"
-    }).then((res)=>{
-      _this.user.username=res.data;
-    })
+    // axios({
+    //   method:"get",
+    //   headers:{
+    //     'Content-Type':'application/json',
+    //   },
+    //   url:"user/getUsername"
+    // }).then((res)=>{
+    //   _this.user.username=res.data;
+    // })
   },
   data() {
     return {

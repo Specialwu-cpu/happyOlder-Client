@@ -1,7 +1,7 @@
 <template>
-  <div style="background-color:  #e4ecf5">
+  <div style="background-color:  white">
   <el-table
-    :data="tableData_rec"
+    :data="volunteerInfo"
     stripe
     style="width: 100%"
     :default-sort = "{prop: 'id', order: 'ascending'}"
@@ -19,25 +19,25 @@
       width="100">
     </el-table-column>
     <el-table-column
-      prop="age"
-      label="年龄"
+      prop="gender"
+      label="性别"
       sortable
-      width="170">
+      width="80">
     </el-table-column>
     <el-table-column
-      prop="shenFen"
-      label="身份证号"
-      width="170">
+      prop="phone"
+      label="电话号码"
+      width="70">
     </el-table-column>
     <el-table-column
-      prop="birthDay"
-      label="生日"
-      width="60">
+      prop="id_card"
+      label="身份证号码"
+      width="100">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="家庭住址"
-      width="170">
+      prop="description"
+      label="描述"
+      width="180">
     </el-table-column>
     <el-table-column
       fixed="right"
@@ -45,13 +45,13 @@
       width="160">
       <template slot-scope="scope">
         <el-button
-          @click="modifyVolunteer"
+          @click="modifyVolunteer(scope.$index, volunteerInfo)"
           type="text"
           size="small">
           修改
         </el-button>
         <el-button
-          @click.native.prevent="deleteRow(scope.$index, tableData_rec)"
+          @click.native.prevent="deleteRow(scope.$index, volunteerInfo)"
           type="text"
           size="small">
           移除
@@ -59,6 +59,7 @@
       </template>
     </el-table-column>
   </el-table>
+    <el-button @click="addRow" style="margin-top: 10px; background-color:  white">添加</el-button>
   </div>
 </template>
 
@@ -67,37 +68,42 @@ import axios from "axios";
 
 export default {
   methods: {
-    modifyVolunteer(){
-      this.$router.push({path:'/userCenter/modifyVolunteer', query: {id:"1"}})
+    addRow(){
+      this.$router.push('/userCenter/addVolunteer');
+    },
+    modifyVolunteer(index, rows){
+      let id = rows[index].id
+      this.$router.push({path:'/userCenter/modifyVolunteer', query: {id:id}})
     },
     deleteRow(index, rows) {
       let id = rows[index].id
-      this.$http.post("/user/delTrain", {id}).then((res) => {
-        this.tableData_rec.splice(index, 1)
+      let url = "http://43.143.150.4:8010/volunteer/delete/"+id.toString()+'/'
+      this.$http.delete(url).then((res) => {
+        this.olderInfo.splice(index, 1)
+        console.log(res)
+        this.volunteerInfo.splice(index, 1)
       })
     },
   },
   created() {
+    console.log(1)
     var _this = this
-    _this.tableData_rec = [{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1},{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1}]
-    // axios({
-    //   method:"get",
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //   },
-    //   url:"/user/getTrain"
-    // }).then((res)=>{
-    //   _this.tableData_rec=res.data;
-    // })
+    axios({
+      method:"get",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      url:"http://43.143.150.4:8010/volunteer/get_all"
+    }).then((res)=>{
+      console.log(res)
+      _this.volunteerInfo = res.data.data
+    })
   },
   data() {
     return {
-      tableData_rec: [
-
+      volunteerInfo: [
   ],
-
     }
   },
-
 }
 </script>

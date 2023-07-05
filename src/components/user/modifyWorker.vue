@@ -6,33 +6,54 @@
     <el-form-item label="个人信息" prop="password">
       <div>
         <label for="name">真实姓名:</label>
-        <el-input id="name" style="width: 400px" placeholder="真实姓名" v-model="user.real_name" prefix-icon="el-icon-lock"></el-input>
+        <el-input id="name" style="width: 400px" placeholder="真实姓名" v-model="user.username" prefix-icon="el-icon-lock"></el-input>
       </div>
       <div>
         <label for="gender">性别:</label>
-        <el-input id="gender" style="width: 400px" placeholder="性别" v-model="user.sex" prefix-icon="el-icon-lock"></el-input>
+        <el-input id="gender" style="width: 400px" placeholder="性别" v-model="user.gender" prefix-icon="el-icon-lock"></el-input>
       </div>
       <div>
         <label for="phone">电话号码:</label>
         <el-input id="phone" style="width: 400px" placeholder="电话号码" v-model="user.phone" prefix-icon="el-icon-lock"></el-input>
       </div>
       <div>
-        <label for="shenFen">身份证号:</label>
-        <el-input id="shenFen" style="width: 400px" placeholder="身份证号" v-model="user.phone" prefix-icon="el-icon-lock"></el-input>
+        <label for="id_card">身份证号:</label>
+        <el-input id="id_card" style="width: 400px" placeholder="身份证号" v-model="user.id_card" prefix-icon="el-icon-lock"></el-input>
       </div>
       <div>
         <label for="birthday">出生日期:</label>
-        <el-input id="birthday" style="width: 400px" placeholder="出生日期" v-model="user.mobile" prefix-icon="el-icon-lock"></el-input>
+        <el-date-picker
+          style="width: 350px"
+          id="birthday"
+          v-model="user.birthday"
+          type="date"
+          placeholder="Select date"
+          @change="handleDateChange"
+        ></el-date-picker>
       </div>
       <div>
-        <label for="hire_date">入职日期:</label>
-        <el-input id="hire_date" style="width: 350px" placeholder="入职日期" v-model="user.description" prefix-icon="el-icon-lock"></el-input>
-        <label for="resign_date">离职日期:</label>
-        <el-input id="resign_date" style="width: 350px" placeholder="离职日期" v-model="user.description" prefix-icon="el-icon-lock"></el-input>
+        <label for="checkin_date">受聘日期:</label>
+        <el-date-picker
+          style="width: 350px"
+          id="checkin_date"
+          v-model="user.hire_date"
+          type="date"
+          placeholder="Select date"
+          @change="handleDateChange"
+        ></el-date-picker>
+        <label for="checkout_date">离职日期:</label>
+        <el-date-picker
+          style="width: 350px"
+          id="checkout_date"
+          v-model="user.resign_date"
+          type="date"
+          placeholder="Select date"
+          @change="handleDateChange"
+        ></el-date-picker>
       </div>
       <div>
         <label for="description">描述:</label>
-        <el-input id="description" style="width: 400px" placeholder="描述" v-model="user.description" prefix-icon="el-icon-lock"></el-input>
+        <el-input id="description" style="width: 400px" placeholder="描述" v-model="user.DESCRIPTION" prefix-icon="el-icon-lock"></el-input>
       </div>
     </el-form-item>
     <el-form-item class="btns">
@@ -46,64 +67,86 @@ import axios from "axios";
 
 export default {
   created() {
-    var _this = this
-    this.user.id = this.$route.query.id
-    // axios({
-    //   method:"get",
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //   },
-    //   url:"user/getUsername"
-    // }).then((res)=>{
-    //   _this.user.username=res.data;
-    //   _this.newUser.username=res.data.username;
-    // })
-
+    this.user.id=this.$route.query.id;
+    let url = 'http://43.143.150.4:8010/employee/get/'+ this.user.id.toString()+'/'
+    console.log(url)
+    axios({
+      method:"get",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      url:url
+    }).then((res)=>{
+      console.log(res.data.employee)
+      this.user=res.data.employee;
+    })
   },
   data() {
     return {
       labelPosition: 'top',
       user:{
         id:'',
-        username: '',
-        password:'',
-        real_name:'',
-        sex:'',
-        email:'',
-        phone:'',
-        mobile:'',
-        description:'',
+        username:'',
+        gender:'',
+        phone: '',
+        id_card:'',
+        birthday:'',
+        hire_date:'',
+        resign_date:'',
+        DESCRIPTION:'',
       },
-      newUser:{
-        username: '',
-        password:''
-      }
     }
   },
   methods:{
     submit(){
-        axios({
-          method:"post",
-          headers:{
-            'Content-Type':'application/json',
-          },
-          data:JSON.stringify(this.user),
-          url:"user/revise"
-        }).then(res => {
-          if(res.data.loginMsg=='1')
-          {
-            this.$message.error('用户名重复，修改失败！');
-            this.user.username=this.newUser.username;
-          }
-          else
-          {
-            this.$message({
-              message: '修改成功！',
-              type: 'success'
-            });
-          }
-
-        })
+      if(!this.isValid()){
+        return;
+      }
+      let url = "http://43.143.150.4:8010/employee/update/"+this.user['id'].toString()+'/'
+      console.log(url)
+      console.log(JSON.stringify(this.user))
+      axios({
+        method:"put",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        data:JSON.stringify(this.user),
+        url:url
+      }).then(res => {
+        {
+          this.$message({
+            message: '修改成功！',
+            type: 'success'
+          });
+        }
+      })
+    },
+    isValid(){
+      if(this.user.username==="" || this.user.username== null){
+        this.$message({
+          message: '姓名必须填写！',
+          type: 'error'
+        });
+        return false;
+      }
+      if(this.user.birthday === "" || this.user.birthday== null){
+        this.$message({
+          message: '生日必须填写！',
+          type: 'error'
+        });
+        return false;
+      }
+      if(this.user.hire_date === "" || this.user.hire_date== null){
+        this.$message({
+          message: '访问日期必须填写！',
+          type: 'error'
+        });
+        return false;
+      }
+      return true;
+    },
+    handleDateChange(){
+      console.log(this.user.birthday)
     }
   }
 }

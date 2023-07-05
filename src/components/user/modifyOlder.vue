@@ -46,7 +46,6 @@
       </div>
       <div>
         <label for="checkin_date">入院日期:</label>
-<!--        <el-input id="checkin_date" style="width: 350px" placeholder="入院日期" v-model="user.checkin_date" prefix-icon="el-icon-lock"></el-input>-->
         <el-date-picker
           style="width: 350px"
           id="checkin_date"
@@ -56,7 +55,6 @@
           @change="handleDateChange"
         ></el-date-picker>
         <label for="checkout_date">离院日期:</label>
-<!--        <el-input id="checkout_date" style="width: 350px" placeholder="离院日期" v-model="user.checkout_date" prefix-icon="el-icon-lock"></el-input>-->
         <el-date-picker
           style="width: 350px"
           id="checkout_date"
@@ -99,14 +97,12 @@
 
 <script>
 import axios from "axios";
-import fa from "element-ui/src/locale/lang/fa";
 
 export default {
   created() {
     this.user.id=this.$route.query.id;
     let url = 'http://43.143.150.4:8010/oldPerson/get/'
     url = url + this.user.id.toString()
-    var _this = this
     axios({
       method:"get",
       headers:{
@@ -114,10 +110,7 @@ export default {
       },
       url:url,
     }).then((res)=>{
-      // console.log(res.data.old_person)
-      _this.user = res.data.old_person
-      // _this.user.username=res.data;
-      // _this.newUser.username=res.data.username;
+      this.user = res.data.old_person
     })
   },
   data() {
@@ -134,7 +127,7 @@ export default {
         birthday:'',
         description:'',
         checkin_date:'',
-        checkout_date:'2200-01-01',
+        checkout_date:'',
         firstguardian_name:'',
         firstguardian_relationship:'',
         firstguardian_phone:'',
@@ -155,7 +148,6 @@ export default {
       if(!this.isValid()){
         return;
       }
-      console.log(this.user)
       let url = "http://43.143.150.4:8010/oldPerson/update/"+this.user['ID'].toString()+'/'
       console.log(JSON.stringify(this.user))
         axios({
@@ -166,19 +158,10 @@ export default {
           data:JSON.stringify(this.user),
           url:url
         }).then(res => {
-          console.log(res)
-          if(res.data.loginMsg=='1')
-          {
-            this.$message.error('用户名重复，修改失败！');
-            this.user.username=this.newUser.username;
-          }
-          else
-          {
             this.$message({
               message: '修改成功！',
               type: 'success'
             });
-          }
         })
     },
     isValid(){

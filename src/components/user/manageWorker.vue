@@ -1,79 +1,87 @@
-manageOlder.vue<template>
-  <div style="background-color:  #e4ecf5">
-  <el-table
-    :data="tableData_rec"
-    stripe
-    style="width: 100%"
-    :default-sort = "{prop: 'id', order: 'ascending'}"
-    max-height="800px">
-    <el-table-column
-      prop="id"
-      label="编号"
-      sortable
-      width="80">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      sortable
-      width="100">
-    </el-table-column>
-    <el-table-column
-      prop="age"
-      label="年龄"
-      sortable
-      width="170">
-    </el-table-column>
-    <el-table-column
-      prop="shenFen"
-      label="身份证号"
-      width="170">
-    </el-table-column>
-    <el-table-column
-      prop="birthDay"
-      label="生日"
-      width="60">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="家庭住址"
-      width="170">
-    </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="操作"
-      width="160">
-      <template slot-scope="scope">
-        <el-button
-          @click="modifyWorker"
-          type="text"
-          size="small">
-          修改
-        </el-button>
-        <el-button
-          @click.native.prevent="deleteRow(scope.$index, tableData_rec)"
-          type="text"
-          size="small">
-          移除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+<template>
+  <div style="background-color:  white">
+    <el-table
+      :data="employeeInfo"
+      stripe
+      style="width: 100%"
+      :default-sort = "{prop: 'id', order: 'ascending'}"
+      max-height="800px">
+      <el-table-column
+        prop="id"
+        label="编号"
+        sortable
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="username"
+        label="姓名"
+        sortable
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="gender"
+        label="性别"
+        sortable
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="phone"
+        label="电话号码"
+        width="70">
+      </el-table-column>
+      <el-table-column
+        prop="id_card"
+        label="身份证号码"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="description"
+        label="描述"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="160">
+        <template slot-scope="scope">
+          <el-button
+            @click="modifyWorker(scope.$index, employeeInfo)"
+            type="text"
+            size="small">
+            修改
+          </el-button>
+          <el-button
+            @click.native.prevent="deleteRow(scope.$index, employeeInfo)"
+            type="text"
+            size="small">
+            移除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button @click="addRow" style="margin-top: 10px; background-color:  white">添加</el-button>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import modifyWorker from "./modifyWorker.vue";
 
 export default {
   methods: {
-    modifyWorker(){
-      this.$router.push({path:"/userCenter/modifyWorker", query: {id:"1"}})
+    addRow(){
+      this.$router.push('/userCenter/addWorker')
+    },
+    modifyWorker(index, rows){
+      let id = rows[index].id
+      this.$router.push({path:'/userCenter/modifyWorker', query: {id:id}})
     },
     deleteRow(index, rows) {
       let id = rows[index].id
-      this.$http.post("/user/delTrain", {id}).then((res) => {
-        this.tableData_rec.splice(index, 1)
+      let url = "http://43.143.150.4:8010/employee/delete/"+id.toString()+'/'
+      this.$http.delete(url).then((res) => {
+        this.employeeInfo.splice(index, 1)
+        console.log(res)
       })
     },
   },
@@ -84,19 +92,16 @@ export default {
       headers:{
         'Content-Type':'application/json',
       },
-      url:"http://43.143.150.4:8010/employee/get_all/"
+      url:"http://43.143.150.4:8010/employee/get_all"
     }).then((res)=>{
-      _this.tableData_rec = res.data
+      _this.employeeInfo = res.data.data
     })
   },
   data() {
     return {
-      tableData_rec: [
-
-  ],
-
+      employeeInfo: [
+      ],
     }
   },
-
 }
 </script>

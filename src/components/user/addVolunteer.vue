@@ -57,47 +57,31 @@
       </div>
     </el-form-item>
     <el-form-item class="btns">
-      <el-button type="primary" @click="submit">修改</el-button>
+      <el-button type="primary" @click="submit">添加</el-button>
     </el-form-item>
   </el-form>
 </template>
+
 
 <script>
 import axios from "axios";
 
 export default {
-  created() {
-    this.user.id=this.$route.query.id;
-    let url = 'http://43.143.150.4:8010/volunteer/get/'+ this.user.id.toString()+'/'
-    console.log(url)
-    axios({
-      method:"get",
-      headers:{
-        'Content-Type':'application/json',
-      },
-      url:url
-    }).then((res)=>{
-      this.user=res.data.volunteer;
-    })
-  },
   data() {
     return {
       labelPosition: 'top',
       user:{
         id:'',
-        name:'',
+        name: '',
         gender:'',
-        phone: '',
+        phone:'',
         id_card:'',
         birthday:'',
+        description:'',
         checkin_date:'',
-        checkout_date:'',
-        DESCRIPTION:'',
+        checkout_date:'2200-01-01',
+        DESCRIPTION: '',
       },
-      newUser:{
-        username: '',
-        password:''
-      }
     }
   },
   methods:{
@@ -105,24 +89,21 @@ export default {
       if(!this.isValid()){
         return;
       }
-      let url = "http://43.143.150.4:8010/volunteer/update/"+this.user['id'].toString()+'/'
-      console.log(url)
-      console.log(JSON.stringify(this.user))
-        axios({
-          method:"put",
-          headers:{
-            'Content-Type':'application/json',
-          },
-          data:JSON.stringify(this.user),
-          url:url
-        }).then(res => {
-          {
-            this.$message({
-              message: '修改成功！',
-              type: 'success'
-            });
-          }
-        })
+      let url = "http://43.143.150.4:8010/volunteer/create/"
+      axios({
+        method:"post",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        data:JSON.stringify(this.user),
+        url:url
+      }).then(res => {
+        console.log(res);
+        this.$message({
+          message: '添加成功！',
+          type: 'success'
+        });
+      })
     },
     isValid(){
       if(this.user.name==="" || this.user.name== null){
@@ -141,7 +122,7 @@ export default {
       }
       if(this.user.checkin_date === "" || this.user.checkin_date== null){
         this.$message({
-          message: '访问日期必须填写！',
+          message: '入院日期必须填写！',
           type: 'error'
         });
         return false;
@@ -150,7 +131,7 @@ export default {
     },
     handleDateChange(){
       console.log(this.user.birthday)
-    }
+    },
   }
 }
 </script>
