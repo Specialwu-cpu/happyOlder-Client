@@ -1,8 +1,5 @@
 <template>
   <el-form style="margin-top:50px" label-width="10px" :label-position="labelPosition" ref="LoginFormRef" :model="user"  class="login_form">
-    <el-form-item  label="编号" prop="id">
-      <el-input :disabled="true" style="width: 500px" placeholder=编号 v-model="user.ID" prefix-icon="el-icon-user"></el-input>
-    </el-form-item>
     <el-form-item label="个人信息" prop="password">
       <div>
         <label for="name">真实姓名:</label>
@@ -30,7 +27,7 @@
       </div>
       <div>
         <label for="birthday">出生日期:</label>
-<!--        <el-input id="birthday" style="width: 400px" placeholder="出生日期" v-model="user.birthday" prefix-icon="el-icon-lock"></el-input>-->
+        <!--        <el-input id="birthday" style="width: 400px" placeholder="出生日期" v-model="user.birthday" prefix-icon="el-icon-lock"></el-input>-->
         <el-date-picker
           style="width: 350px"
           id="birthday"
@@ -46,7 +43,7 @@
       </div>
       <div>
         <label for="checkin_date">入院日期:</label>
-<!--        <el-input id="checkin_date" style="width: 350px" placeholder="入院日期" v-model="user.checkin_date" prefix-icon="el-icon-lock"></el-input>-->
+        <!--        <el-input id="checkin_date" style="width: 350px" placeholder="入院日期" v-model="user.checkin_date" prefix-icon="el-icon-lock"></el-input>-->
         <el-date-picker
           style="width: 350px"
           id="checkin_date"
@@ -56,7 +53,7 @@
           @change="handleDateChange"
         ></el-date-picker>
         <label for="checkout_date">离院日期:</label>
-<!--        <el-input id="checkout_date" style="width: 350px" placeholder="离院日期" v-model="user.checkout_date" prefix-icon="el-icon-lock"></el-input>-->
+        <!--        <el-input id="checkout_date" style="width: 350px" placeholder="离院日期" v-model="user.checkout_date" prefix-icon="el-icon-lock"></el-input>-->
         <el-date-picker
           style="width: 350px"
           id="checkout_date"
@@ -92,34 +89,16 @@
       </div>
     </el-form-item>
     <el-form-item class="btns">
-      <el-button type="primary" @click="submit">修改</el-button>
+      <el-button type="primary" @click="submit">添加</el-button>
     </el-form-item>
   </el-form>
 </template>
 
+
 <script>
 import axios from "axios";
-import fa from "element-ui/src/locale/lang/fa";
 
 export default {
-  created() {
-    this.user.id=this.$route.query.id;
-    let url = 'http://43.143.150.4:8010/oldPerson/get/'
-    url = url + this.user.id.toString()
-    var _this = this
-    axios({
-      method:"get",
-      headers:{
-        'Content-Type':'application/json',
-      },
-      url:url,
-    }).then((res)=>{
-      // console.log(res.data.old_person)
-      _this.user = res.data.old_person
-      // _this.user.username=res.data;
-      // _this.newUser.username=res.data.username;
-    })
-  },
   data() {
     return {
       labelPosition: 'top',
@@ -155,31 +134,21 @@ export default {
       if(!this.isValid()){
         return;
       }
-      console.log(this.user)
-      let url = "http://43.143.150.4:8010/oldPerson/update/"+this.user['ID'].toString()+'/'
-      console.log(JSON.stringify(this.user))
-        axios({
-          method:"put",
-          headers:{
-            'Content-Type':'application/json',
-          },
-          data:JSON.stringify(this.user),
-          url:url
-        }).then(res => {
-          console.log(res)
-          if(res.data.loginMsg=='1')
-          {
-            this.$message.error('用户名重复，修改失败！');
-            this.user.username=this.newUser.username;
-          }
-          else
-          {
-            this.$message({
-              message: '修改成功！',
-              type: 'success'
-            });
-          }
-        })
+      let url = "http://43.143.150.4:8010/oldPerson/create/"
+      axios({
+        method:"post",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        data:JSON.stringify(this.user),
+        url:url
+      }).then(res => {
+        console.log(res);
+        this.$message({
+          message: '添加成功！',
+          type: 'success'
+        });
+      })
     },
     isValid(){
       if(this.user.username==="" || this.user.username== null){

@@ -1,7 +1,7 @@
 <template>
   <div style="background-color:  white">
   <el-table
-    :data="tableData_rec"
+    :data="olderInfo"
     stripe
     style="width: 100%"
     :default-sort = "{prop: 'id', order: 'ascending'}"
@@ -19,25 +19,30 @@
       width="100">
     </el-table-column>
     <el-table-column
-      prop="age"
-      label="年龄"
+      prop="gender"
+      label="性别"
       sortable
-      width="170">
+      width="80">
     </el-table-column>
     <el-table-column
-      prop="shenFen"
-      label="身份证号"
-      width="170">
+      prop="room_number"
+      label="房间号"
+      width="70">
     </el-table-column>
     <el-table-column
-      prop="age"
+      prop="birthday"
       label="生日"
-      width="60">
+      width="100">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="家庭住址"
-      width="170">
+      prop="healthy_state"
+      label="健康状况"
+      width="100">
+    </el-table-column>
+    <el-table-column
+      prop="description"
+      label="描述"
+      width="180">
     </el-table-column>
     <el-table-column
       fixed="right"
@@ -45,13 +50,13 @@
       width="160">
       <template slot-scope="scope">
         <el-button
-          @click="modifyOlder(scope.$index, tableData_rec)"
+          @click="modifyOlder(scope.$index, olderInfo)"
           type="text"
           size="small">
           修改
         </el-button>
         <el-button
-          @click.native.prevent="deleteRow(scope.$index, tableData_rec)"
+          @click.native.prevent="deleteRow(scope.$index, olderInfo)"
           type="text"
           size="small">
           移除
@@ -69,16 +74,18 @@ import axios from "axios";
 export default {
   methods: {
     addRow(){
-      this.$router.push('/userCenter/modifyOlder');
+      this.$router.push('/userCenter/addOlder');
     },
     modifyOlder(index, rows){
       let id = rows[index].ID
       this.$router.push({path:'/userCenter/modifyOlder', query: {id: id}})
     },
     deleteRow(index, rows) {
-      let id = rows[index].id
-      this.$http.post("/user/delTrain", {id}).then((res) => {
-        this.tableData_rec.splice(index, 1)
+      let id = rows[index].ID
+      let url = "http://43.143.150.4:8010/oldPerson/delete/"+id.toString()+'/'
+      this.$http.delete(url).then((res) => {
+        this.olderInfo.splice(index, 1)
+        console.log(res)
       })
     },
   },
@@ -91,12 +98,17 @@ export default {
       },
       url:"http://43.143.150.4:8010/oldPerson/get_all"
     }).then((res)=>{
-      _this.tableData_rec=res.data.data;
+      _this.olderInfo=res.data.data;
+      for (var data in _this.olderInfo){
+        if(_this.olderInfo[data]['birthday'] != null){
+          _this.olderInfo[data]['birthday'] = _this.olderInfo[data]['birthday'].slice(0,10)
+        }
+      }
     })
   },
   data() {
     return {
-      tableData_rec: [
+      olderInfo: [
   ],
 
     }

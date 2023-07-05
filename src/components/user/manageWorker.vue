@@ -79,17 +79,15 @@ export default {
   },
   created() {
     var _this = this
-    _this.tableData_rec = [{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1},{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1}]
-    // axios({
-    //   method:"get",
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //   },
-    //   url:"/user/getTrain"
-    // }).then((res)=>{
-    //   _this.tableData_rec = [{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1},{"id":1, "name":2, "age":3,"shenFen":3,"birthDay":1, "address":1}]
-    //   // _this.tableData_rec=res.data;
-    // })
+    axios({
+      method:"get",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      url:"http://43.143.150.4:8010/employee/get_all/"
+    }).then((res)=>{
+      _this.tableData_rec = res.data
+    })
   },
   data() {
     return {
