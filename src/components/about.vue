@@ -40,24 +40,24 @@
 
 <script>
 // 检测浏览器是否支持 getUserMedia
-// if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
   // 请求访问摄像头
-  // navigator.mediaDevices.getUserMedia({ video: true })
-  //   .then(function(stream) {
-  //     // 成功获取到摄像头数据流
-  //     // 在页面上显示摄像头画面
-  //     var videoElement = document.getElementById('videoElement');
-  //     videoElement.srcObject = stream;
-  //   })
-  //   .catch(function(error) {
-  //     // 获取摄像头失败，处理错误
-  //     console.error('无法访问摄像头:', error);
-  //   });
-// }
-// else {
-//   // 浏览器不支持 getUserMedia
-//   console.error('浏览器不支持摄像头访问');
-// }
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function(stream) {
+      // 成功获取到摄像头数据流
+      // 在页面上显示摄像头画面
+      var videoElement = document.getElementById('videoElement');
+      videoElement.srcObject = stream;
+    })
+    .catch(function(error) {
+      // 获取摄像头失败，处理错误
+      console.error('无法访问摄像头:', error);
+    });
+}
+else {
+  // 浏览器不支持 getUserMedia
+  console.error('浏览器不支持摄像头访问');
+}
 export default {
   name: "about",
   data() {
