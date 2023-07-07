@@ -12,52 +12,17 @@
         {{ item.navItem }}
       </el-menu-item>
     </el-menu>
-
-<!--    <el-tooltip class="item" effect="dark" content="注销" placement="bottom">-->
       <i class="el-icon-switch-button" @click="out" style="color: gray; "></i>
-<!--    </el-tooltip>-->
-
   </el-header>
-    <video id="videoElement" :src="videoElement" height="100" width="110" autoplay></video>
   <el-container  style="border: 1px solid #eee;" >
-    <el-form class="about" style="margin-top:80px" label-width="10px" :label-position="labelPosition" >
-
-  <span class="title" style="margin-left: 630px">第11组</span> <br />
-      <br><br>
-      <span class="text" style="margin-left: 600px">算法: 郑若翀 陈作豪</span> <br />
-      <br>
-      <span class="text" style="margin-left: 500px">后端：陈佳运</span> <br />
-      <br>
-      <span class="text" style="margin-left: 600px">前端：郑荣泰 杨昊骏</span> <br />
-      <br><br>
-      <span class="gitee" style="margin-left: 500px">Gitee:</span>
-  <el-link class="link" href="https://gitee.com/Nicoqwq/course-practice-3-11-groups" type="primary">https://gitee.com/Nicoqwq/course-practice-3-11-groups</el-link>
-
-    </el-form>
+      <img src="../assets/1.jpg" style="width: 900px; height:700px;margin: 0 auto">
   </el-container>
   </el-container>
+
 </template>
 
 <script>
-// 检测浏览器是否支持 getUserMedia
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  // 请求访问摄像头
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function(stream) {
-      // 成功获取到摄像头数据流
-      // 在页面上显示摄像头画面
-      var videoElement = document.getElementById('videoElement');
-      videoElement.srcObject = stream;
-    })
-    .catch(function(error) {
-      // 获取摄像头失败，处理错误
-      console.error('无法访问摄像头:', error);
-    });
-}
-else {
-  // 浏览器不支持 getUserMedia
-  console.error('浏览器不支持摄像头访问');
-}
+let websockets
 export default {
   name: "about",
   data() {
@@ -65,10 +30,32 @@ export default {
       navList:[
         {name:'/user3',navItem:'处理中心'},
         {name:'/userCenter',navItem:'个人中心'},
-        {name:'/about',navItem:'关于我们'},
+        {name:'/about',navItem:'实时监控'},
       ]
     }
   },
+  methods:{
+    connect() {
+      // 1. 创建websockets对象，参数为服务器websockets地址
+      websockets = new WebSocket("ws:127.0.0.1:8888");
+
+      // 2.监听websocket的状态变化，接收的信息，关闭时的状态
+
+      //监听连接状态的变化
+      websockets.onopen = (event) => {
+        console.log(event)
+      };
+      //监听接收消息的情况
+      websockets.onmessage = (res) => {
+        console.log(res.data)
+      }
+      //监听关闭时的状态变化
+      websockets.onclose = (event) => socketChange();
+    },
+    send(){
+      websockets.send("hello!")
+    }
+  }
 }
 </script>
 

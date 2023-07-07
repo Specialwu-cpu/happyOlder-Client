@@ -150,7 +150,7 @@ export default {
       navList:[
         {name:'/user3',navItem:'处理中心'},
         {name:'/userCenter/modifyAdmin',navItem:'个人中心'},
-        {name:'/about',navItem:'关于我们'},
+        {name:'/about',navItem:'实时监控'},
       ]
     }
   },
