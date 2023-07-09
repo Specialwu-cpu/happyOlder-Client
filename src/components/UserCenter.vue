@@ -80,8 +80,8 @@ export default {
         username: '用户'
       },
       navList:[
-        {name:'/user3',navItem:'处理中心'},
-        {name:'/userCenter',navItem:'个人中心'},
+        {name:'/user3',navItem:'统计中心'},
+        {name:'/userCenter',navItem:'信息管理'},
         {name:'/about',navItem:'实时监控'},
       ]
     }

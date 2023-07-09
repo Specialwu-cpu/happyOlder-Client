@@ -7,13 +7,12 @@
         style="width: 100%">
         <el-table-column
           prop="bugtext"
-          label="缺陷信息"
+          label="老人选择"
           width="200">
         </el-table-column>
       </el-table>
     </div>
   </div>
-
 </template>
 
 <script>

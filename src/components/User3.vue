@@ -12,12 +12,7 @@
             {{ item.navItem }}
           </el-menu-item>
         </el-menu>
-
-
-<!--        <el-tooltip class="item" effect="dark" content="注销" placement="bottom">-->
           <i class="el-icon-switch-button" @click="out"></i>
-<!--        </el-tooltip>-->
-
       </el-header>
     <!-- 嵌套容器 -->
     <el-container class="background"  style="border: 1px solid #eee;">
@@ -32,42 +27,28 @@
 <!--        <div class="train">-->
 <!--          <el-button @click="train" type="success" icon="el-icon-data-line"  circle>训练</el-button>-->
 <!--        </div>-->
-        <br>
-        <br>
+        
 
         </div>
-
           <br>
           <br>
           <el-menu :default-openeds="['1']">
             <el-submenu index="1">
-              <template slot="title"><i class="el-icon-office-building"></i>处理中心</template>
+              <template slot="title"><i class="el-icon-office-building"></i>统计中心</template>
               <el-menu-item-group>
-                <el-menu-item index="1-1" @click.native="train"><i class="el-icon-cpu"></i>模型训练</el-menu-item>
-                <el-submenu index="1-2">   <template slot="title"><i class="el-icon-document-add"></i>上传文件</template>
-                  <el-upload
-                    class="upload-demo"
-                    action="/api/test/file2"
-                    :accept="fileType"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-remove="beforeRemove"
-                    :on-success="handle_success"
-                    multiple
-                    :limit="1"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList">
-                    <el-button icon="el-icon-circle-plus-outline">上传文件</el-button>
-                  </el-upload>
+                <el-menu-item index="1-1" @click.native="train"><i class="el-icon-cpu"></i>老人统计</el-menu-item>
+                <el-submenu index="1-2">   <template slot="title"><i class="el-icon-document-add"></i>年龄统计</template>
+
                 </el-submenu>
-                <el-submenu index="1-3" >           <template slot="title" style="flex: fit-content"><i class="el-icon-thumb"></i>选择模型</template>
+                <el-submenu index="1-3" >           <template slot="title" style="flex: fit-content"><i class="el-icon-thumb"></i>行为统计</template>
                   <el-cascader
                     v-model="value"
                     :options="options"
                     @change="handleChange"
                   ></el-cascader>
                 </el-submenu>
-                <el-menu-item index="1-4" @click.native="predict"><i class="el-icon-data-analysis"></i>模型预测</el-menu-item>
+                <el-menu-item index="1-4" @click.native="predict"><i class="el-icon-data-analysis"></i>职工统计</el-menu-item>
+                <el-menu-item index="1-1" @click.native="train"><i class="el-icon-cpu"></i>义工统计</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -75,12 +56,27 @@
       </el-aside>
       <!-- 内容 -->
       <el-row gutter="24" style="margin-top: 0px;" >
-
         <el-col :span="120">
           <el-card class="box-card_up_left" style=" margin-left:60px;margin-top:15px;
-          height: 780px;width: 640px;" shadow="hover" background-color="FFFF00">
+          height: 850px;width: 700px;" shadow="hover" background-color="FFFF00">
             <section class="itemLeftUp">
               <ItemPage >
+                <el-date-picker
+                  style="width: 250px"
+                  id="checkin_date"
+                  v-model="this.startDate"
+                  type="date"
+                  placeholder="开始日期"
+                  @click="handleDateChange"
+                ></el-date-picker>
+                <el-date-picker
+                  style="width: 250px"
+                  id="checkout_date"
+                  v-model="this.endDate"
+                  type="date"
+                  placeholder="结束日期"
+                  @click="handleDateChange"
+                ></el-date-picker>
                 <itemTwo  class="zhu" :key="datas" :msg="datas"></itemTwo>
               </ItemPage>
             </section>
@@ -124,11 +120,14 @@ import itemMap from "./item/itemMap";
 import itemFive from "./item/itemFive";
 import ItemPage from "./itemPage";
 import axios from "axios";
+import {ElDatePicker} from "element-ui/lib/date-picker";
 export default {
   data() {
     return {
       fileList:[],
       fileType:[".png",".jpg", ".bmp"],
+      startDate:'',
+      endDate:'',
       datas:[],
       modname:[],
       acc:[],
@@ -148,8 +147,8 @@ export default {
       dialogVisible:false,
       change:0,
       navList:[
-        {name:'/user3',navItem:'处理中心'},
-        {name:'/userCenter/modifyAdmin',navItem:'个人中心'},
+        {name:'/user3',navItem:'统计中心'},
+        {name:'/userCenter/modifyAdmin',navItem:'信息管理'},
         {name:'/about',navItem:'实时监控'},
       ]
     }
@@ -183,33 +182,6 @@ export default {
         }
       })
       this.dialogVisible=true
-    },
-    handleChange(value) {
-      console.log(value);
-    },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-      this.chooseForms=[]
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
-    },
-    handle_success(res){
-      console.log(res)
-      this.$message.success('文件上传成功')
     },
 
     user(){
@@ -270,7 +242,10 @@ export default {
           {value:"perception",label:"感知机",children:this.pChildren})
       })
     },
-
+    handleDateChange(){
+      console.log(this.startDate)
+      console.log(this.endDate)
+    }
   },
   mounted() {
     this.choose()

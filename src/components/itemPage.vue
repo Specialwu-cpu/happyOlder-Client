@@ -11,7 +11,7 @@ export default {};
 
 <style>
 .item {
-  height: 300px;
+  height: 400px;
   /* 外边距20px */
   margin: 20px;
   background-color: white;

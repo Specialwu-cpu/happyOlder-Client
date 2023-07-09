@@ -30,7 +30,7 @@ export default {
         // const response = await axios.get('YOUR_API_ENDPOINT'); // 发送异步请求
         // 更新图表数据
         if(this.times<8){
-          for (var i=0;i<4;i++){
+          for (var i=0;i<6;i++){
             this.modname[i]="2023-07-0"+i.toString()
             this.acc[i]=this.acc[i]*0.9
             this.ppv[i]=this.ppv[i]*0.8
@@ -39,7 +39,7 @@ export default {
           }
           this.times++;
         }else {
-          for (var i=0;i<4;i++) {
+          for (var i=0;i<6;i++) {
             this.modname[i] = "2023-07-0" + i.toString()
             this.acc[i] = 0.1
             this.ppv[i] = 0.9

@@ -1,5 +1,6 @@
 <template>
   <el-form style="margin-top:50px" label-width="10px" :label-position="labelPosition" ref="LoginFormRef" :model="user"  class="login_form">
+    <profile-picture :user="user" usertype="Volunteer" ype=""></profile-picture>
     <el-form-item  label="编号" prop="id">
       <el-input :disabled="true" style="width: 500px" placeholder=编号 v-model="user.id" prefix-icon="el-icon-user"></el-input>
     </el-form-item>
@@ -64,8 +65,10 @@
 
 <script>
 import axios from "axios";
+import profilePicture from "../profilePicture.vue";
 
 export default {
+  components: {profilePicture},
   created() {
     this.user.id=this.$route.query.id;
     let url = 'http://43.143.150.4:8010/volunteer/get/'+ this.user.id.toString()+'/'
@@ -83,6 +86,7 @@ export default {
   data() {
     return {
       labelPosition: 'top',
+      fileType:[".png",".jpg", ".bmp"],
       user:{
         id:'',
         name:'',
