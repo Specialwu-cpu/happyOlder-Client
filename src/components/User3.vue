@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <el-container>
     <!-- 顶栏 -->
       <el-header class="el-header" height="70px">
@@ -27,7 +27,7 @@
 <!--        <div class="train">-->
 <!--          <el-button @click="train" type="success" icon="el-icon-data-line"  circle>训练</el-button>-->
 <!--        </div>-->
-        
+
 
         </div>
           <br>
@@ -35,21 +35,12 @@
           <el-menu :default-openeds="['1']">
             <el-submenu index="1">
               <template slot="title"><i class="el-icon-office-building"></i>统计中心</template>
-              <el-menu-item-group>
-                <el-menu-item index="1-1" @click.native="train"><i class="el-icon-cpu"></i>老人统计</el-menu-item>
-                <el-submenu index="1-2">   <template slot="title"><i class="el-icon-document-add"></i>年龄统计</template>
-
+                <el-submenu index="1-1">   <template slot="title"><i class="el-icon-document-add"></i>老人统计</template>
+                  <el-menu-item index="1-1-1" @click.native="itemOlderAge"><i class="el-icon-cpu"></i>年龄统计</el-menu-item>
+                  <el-menu-item index="1-1-2" @click.native="itemOlderBehavior"><i class="el-icon-cpu"></i>行为统计</el-menu-item>
                 </el-submenu>
-                <el-submenu index="1-3" >           <template slot="title" style="flex: fit-content"><i class="el-icon-thumb"></i>行为统计</template>
-                  <el-cascader
-                    v-model="value"
-                    :options="options"
-                    @change="handleChange"
-                  ></el-cascader>
-                </el-submenu>
-                <el-menu-item index="1-4" @click.native="predict"><i class="el-icon-data-analysis"></i>职工统计</el-menu-item>
-                <el-menu-item index="1-1" @click.native="train"><i class="el-icon-cpu"></i>义工统计</el-menu-item>
-              </el-menu-item-group>
+                <el-menu-item index="1-2" @click.native="worker"><i class="el-icon-data-analysis"></i>职工统计</el-menu-item>
+                <el-menu-item index="1-3" @click.native="volunteer"><i class="el-icon-cpu"></i>义工统计</el-menu-item>
             </el-submenu>
           </el-menu>
 
@@ -58,31 +49,14 @@
       <el-row gutter="24" style="margin-top: 0px;" >
         <el-col :span="120">
           <el-card class="box-card_up_left" style=" margin-left:60px;margin-top:15px;
-          height: 850px;width: 700px;" shadow="hover" background-color="FFFF00">
+          height: 850px;width: 750px;" shadow="hover" background-color="FFFF00">
             <section class="itemLeftUp">
               <ItemPage >
-                <el-date-picker
-                  style="width: 250px"
-                  id="checkin_date"
-                  v-model="this.startDate"
-                  type="date"
-                  placeholder="开始日期"
-                  @click="handleDateChange"
-                ></el-date-picker>
-                <el-date-picker
-                  style="width: 250px"
-                  id="checkout_date"
-                  v-model="this.endDate"
-                  type="date"
-                  placeholder="结束日期"
-                  @click="handleDateChange"
-                ></el-date-picker>
-                <itemTwo  class="zhu" :key="datas" :msg="datas"></itemTwo>
+                <component v-bind:is="plot1" class="zhu" :key="datas"></component>
               </ItemPage>
             </section>
           </el-card>
         </el-col>
-
       </el-row>
 
       <el-row  style="margin-top: 0px">
@@ -120,10 +94,19 @@ import itemMap from "./item/itemMap";
 import itemFive from "./item/itemFive";
 import ItemPage from "./itemPage";
 import axios from "axios";
-import {ElDatePicker} from "element-ui/lib/date-picker";
+import pl from "element-ui/src/locale/lang/pl";
+import itemVolunteer from "./item/itemVolunteer.vue";
+import itemWorker from "./item/itemWorker.vue";
+import itemOlderAge from "./item/itemOlderAge.vue";
 export default {
+  computed: {
+    pl() {
+      return pl
+    }
+  },
   data() {
     return {
+      plot1:"item-two",
       fileList:[],
       fileType:[".png",".jpg", ".bmp"],
       startDate:'',
@@ -154,7 +137,7 @@ export default {
     }
   },
   components: {
-    ItemPage,itemOne,itemTwo,itemThree,itemFour,itemMap,itemFive,
+    ItemPage,itemOne,itemTwo,itemThree,itemFour,itemMap,itemFive,itemVolunteer,itemWorker,itemOlderAge
   },
   methods:{
     showMessageFromChild(data){
@@ -190,22 +173,22 @@ export default {
     out(){
       this.$router.push("/login");
     },
-    train(){
-      this.$http.get("/algorithm/Logic").then((res)=>{
-      })
-      this.$http.get("/algorithm/KNN").then((res)=>{
-      })
-      this.$http.get("/algorithm/Bayes").then((res)=>{
-      })
-      this.$http.get("/algorithm/perception").then((res)=>{
-      })
-      this.$http.get("/algorithm/getResult").then((res)=>{
-        this.$message.success('训练完成')
-        this.datas=res.data
-        console.log(this.datas)
-        this.fileList=[]
-      })
-    },
+    // train(){
+    //   this.$http.get("/algorithm/Logic").then((res)=>{
+    //   })
+    //   this.$http.get("/algorithm/KNN").then((res)=>{
+    //   })
+    //   this.$http.get("/algorithm/Bayes").then((res)=>{
+    //   })
+    //   this.$http.get("/algorithm/perception").then((res)=>{
+    //   })
+    //   this.$http.get("/algorithm/getResult").then((res)=>{
+    //     this.$message.success('训练完成')
+    //     this.datas=res.data
+    //     console.log(this.datas)
+    //     this.fileList=[]
+    //   })
+    // },
     predict(){
       console.log(this.value[1])
       let paraId = this.value[1]
@@ -217,6 +200,18 @@ export default {
           this.bugChange=1
         }else this.bugChange=0
       })
+    },
+    volunteer(){
+      this.plot1="item-volunteer"
+    },
+    worker(){
+      this.plot1="item-worker"
+    },
+    itemOlderBehavior(){
+      this.plot1='item-two'
+    },
+    itemOlderAge(){
+      this.plot1='item-older-age'
     },
     choose(){
       this.$http.get("/user/getModel").then((res)=>{

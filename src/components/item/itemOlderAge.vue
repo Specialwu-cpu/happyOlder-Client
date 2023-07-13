@@ -12,14 +12,6 @@ export default {
   data(){
     return{
       datas:{'value1':this.msg},
-      modname:[],
-      acc:[],
-      ppv:[],
-      trp:[],
-      f1:[],
-      id:[],
-      times:0,
-      child:'child',
       chart:{}
     }
   },
@@ -29,25 +21,7 @@ export default {
       try {
         // const response = await axios.get('YOUR_API_ENDPOINT'); // 发送异步请求
         // 更新图表数据
-        if(this.times<8){
-          for (var i=0;i<6;i++){
-            this.modname[i]="2023-07-0"+i.toString()
-            this.acc[i]=this.acc[i]*0.9
-            this.ppv[i]=this.ppv[i]*0.8
-            this.trp[i]=this.trp[i]*0.7
-            this.f1[i]=this.f1[i]*0.8
-          }
-          this.times++;
-        }else {
-          for (var i=0;i<6;i++) {
-            this.modname[i] = "2023-07-0" + i.toString()
-            this.acc[i] = 0.1
-            this.ppv[i] = 0.9
-            this.trp[i] = 0.7
-            this.f1[i] = 0.5
-          }
-          this.times=0;
-        }
+        this.datas=[100,90,80,100,90,80]
         this.updateChart(); // 更新图表
       } catch (error) {
         console.error('请求错误:', error);
@@ -56,7 +30,7 @@ export default {
     updateChart(){
       let option = {
         title: {
-          text: '老人行为统计表'
+          text: '老人年龄统计表'
         },
         tooltip: {
           trigger: 'axis',
@@ -74,33 +48,18 @@ export default {
           containLabel: true
         },
         xAxis: {
-          type: 'value',
+          type: 'category',
+          data: ["60岁以下","60-70","70-80","80-90","90-100","100岁以上"]
           // boundaryGap: [0, 0.01]
         },
         yAxis: {
-          type: 'category',
-          data: this.modname
+          type: 'value',
         },
         series: [
           {
-            name:'开心',
+            name:'人数',
             type: 'bar',
-            data: this.acc
-          },
-          {
-            name:'义工交互',
-            type: 'bar',
-            data: this.ppv
-          },
-          {
-            name:'陌生人闯入',
-            type: 'bar',
-            data: this.trp
-          },
-          {
-            name:'摔倒',
-            type: 'bar',
-            data: this.f1
+            data: this.datas
           },
         ]
       };
