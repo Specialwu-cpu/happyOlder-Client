@@ -68,17 +68,7 @@
               </ItemPage>
             </section>
           </el-card>
-
         </el-col>
-<!--        <el-col :span="120">-->
-<!--          <el-card class="box-card_down_right" style=" margin-left:95px;margin-top:15px;height: 380px;width:570px " shadow="hover">-->
-<!--            <section class="itemRightDown">-->
-<!--              <ItemPage>-->
-<!--&lt;!&ndash;                <item-three  class="word" :key="datas" :msg="datas" v-on:listenTochildEvent="showMessageFromChild"></item-three>&ndash;&gt;-->
-<!--              </ItemPage>-->
-<!--            </section>-->
-<!--          </el-card>-->
-<!--        </el-col>-->
       </el-row>
     </el-container>
 

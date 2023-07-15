@@ -98,9 +98,6 @@ export default {
       })
       this.$router.push("/login");
     },
-    back(){
-      this.$router.push("/user3");
-    }
   }
 
 }
