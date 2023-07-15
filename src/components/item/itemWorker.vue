@@ -11,9 +11,8 @@ import axios from "axios";
 export default {
   data(){
     return{
-      // datas:{'value1':this.msg},
       datas:[{
-      name: '离职',
+        name: '离职',
         type: 'line',
         stack: 'Total',
         data: []
@@ -32,10 +31,21 @@ export default {
   methods:{
     async fetchData() {
       try {
-        // const response = await axios.get('YOUR_API_ENDPOINT'); // 发送异步请求
-        // 更新图表数据
-        this.datas[0].data=[1,2,3,4,5,6,7,8,9,10,11,5];
-        this.datas[1].data=[2,3,4,5,6,7,8,9,10,11,12,11];
+        axios({
+          method: "get",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          url: "http://43.143.150.4:8010/volunteer/get_number/"
+        }).then(res => {
+          let data = res.data
+          for (let i = 0; i < data.response_data.length; i++) {
+            let month = data.response_data[i].month
+            this.datas[0].data[month - 1] = data.response_data[i].checkout_month
+            this.datas[1].data[month - 1] = data.response_data[i].checkin_month
+          }
+          console.log(this.datas[0].data)
+        })
         this.updateChart(); // 更新图表
       } catch (error) {
         console.error('请求错误:', error);
@@ -67,29 +77,14 @@ export default {
             type: 'value'
           },
           series: this.datas
-            // {
-            //   name: '离职',
-            //   type: 'line',
-            //   stack: 'Total',
-            //   data: [120, 132, 101, 134, 90, 230, 210]
-            // },
-            // {
-            //   name: '入职',
-            //   type: 'line',
-            //   stack: 'Total',
-            //   data: [220, 182, 191, 234, 290, 330, 310]
-            // }
       };
       //  绑定数据
       this.chart.setOption(option);
     },
   },
-  // created() {
-  //     this.datas=this.msg
-  // },
   mounted() {
     this.fetchData(); // 首次加载数据
-    this.timer = setInterval(this.fetchData, 5000); // 定时器，每隔5秒请求数据更新图表
+    this.timer = setInterval(this.fetchData, 1000); // 定时器，每隔5秒请求数据更新图表
     this.chart = echarts.init(this.$refs.myChart);
   },
   beforeDestroy() {

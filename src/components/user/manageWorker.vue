@@ -92,7 +92,7 @@ export default {
       headers:{
         'Content-Type':'application/json',
       },
-      url:"http://43.143.150.4:8010/employee/get_all"
+      url:"http://43.143.150.4:8010/employee/get_all/"
     }).then((res)=>{
       _this.employeeInfo = res.data.data
     })

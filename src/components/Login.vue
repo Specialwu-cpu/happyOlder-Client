@@ -92,6 +92,7 @@ export default {
     },
 
     login() {
+      // this.$router.push("/user3");
       if (this.loginForm.username != '' && this.loginForm.password != '') {
           axios({
             method:"post",

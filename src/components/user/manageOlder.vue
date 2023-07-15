@@ -96,7 +96,7 @@ export default {
       headers:{
         'Content-Type':'application/json',
       },
-      url:"http://43.143.150.4:8010/oldPerson/get_all"
+      url:"http://43.143.150.4:8010/oldPerson/get_all/"
     }).then((res)=>{
       _this.olderInfo=res.data.data;
       for (var data in _this.olderInfo){

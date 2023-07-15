@@ -103,7 +103,7 @@ export default {
   created() {
     this.user.id=this.$route.query.id;
     let url = 'http://43.143.150.4:8010/oldPerson/get/'
-    url = url + this.user.id.toString()
+    url = url + this.user.id.toString()+'/'
     axios({
       method:"get",
       headers:{

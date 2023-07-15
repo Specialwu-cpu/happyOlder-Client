@@ -93,7 +93,7 @@ export default {
       headers:{
         'Content-Type':'application/json',
       },
-      url:"http://43.143.150.4:8010/volunteer/get_all"
+      url:"http://43.143.150.4:8010/volunteer/get_all/"
     }).then((res)=>{
       console.log(res)
       _this.volunteerInfo = res.data.data

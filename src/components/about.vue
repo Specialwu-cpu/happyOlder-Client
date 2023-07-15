@@ -16,15 +16,12 @@
     </el-header>
   <el-container  style="border: 1px solid #eee;" >
       <img src="../assets/1.jpg" style="width: 900px; height:700px;margin: 0 auto">
-    <el-button @click="connect">连接</el-button>
-    <el-button @click="send">发送</el-button>
   </el-container>
   </el-container>
 
 </template>
 
 <script>
-let websockets
 export default {
   name: "about",
   data() {
@@ -36,32 +33,7 @@ export default {
       ]
     }
   },
-  methods:{
-    connect() {
-      // 1. 创建websockets对象，参数为服务器websockets地址
-      websockets = new WebSocket("ws:127.0.0.1:8888");
-      // 2.监听websocket的状态变化，接收的信息，关闭时的状态
-      websockets.addEventListener("message",(event)=>{
-        console.log(event)
-      })
-      //监听连接状态的变化
-      websockets.onopen = (event) => {
-        console.log(event.isTrusted)
-      };
-      //监听接收消息的情况
-      websockets.onmessage = (res) => {
-        console.log(res.data)
-      }
-      //监听关闭时的状态变化
-      websockets.onclose = (event) => socketChange();
-    },
-    send(){
-      websockets.send("hello")
-    },
-    out(){
-      this.$router.push("/login");
-    },
-  }
+  methods: {},
 }
 </script>
 

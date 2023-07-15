@@ -61,23 +61,24 @@
 
       <el-row  style="margin-top: 0px">
         <el-col :span="120">
-          <el-card class="box-card_up_right" style="margin-left:95px; margin-top:15px;height: 380px" shadow="hover" >
+          <el-card class="box-card_up_right" style="margin-left:95px; margin-top:15px;height: 700px" shadow="hover" >
             <section class="itemRightUp">
               <ItemPage>
                 <itemOne  class="zhe" :key="bugChange" :msg="bugtext"></itemOne>
               </ItemPage>
             </section>
           </el-card>
+
         </el-col>
-        <el-col :span="120">
-          <el-card class="box-card_down_right" style=" margin-left:95px;margin-top:15px;height: 380px;width:570px " shadow="hover">
-            <section class="itemRightDown">
-              <ItemPage>
-                <item-three  class="word" :key="datas" :msg="datas" v-on:listenTochildEvent="showMessageFromChild"></item-three>
-              </ItemPage>
-            </section>
-          </el-card>
-        </el-col>
+<!--        <el-col :span="120">-->
+<!--          <el-card class="box-card_down_right" style=" margin-left:95px;margin-top:15px;height: 380px;width:570px " shadow="hover">-->
+<!--            <section class="itemRightDown">-->
+<!--              <ItemPage>-->
+<!--&lt;!&ndash;                <item-three  class="word" :key="datas" :msg="datas" v-on:listenTochildEvent="showMessageFromChild"></item-three>&ndash;&gt;-->
+<!--              </ItemPage>-->
+<!--            </section>-->
+<!--          </el-card>-->
+<!--        </el-col>-->
       </el-row>
     </el-container>
 
@@ -106,6 +107,7 @@ export default {
   },
   data() {
     return {
+      input:'',
       plot1:"item-two",
       fileList:[],
       fileType:[".png",".jpg", ".bmp"],
@@ -140,6 +142,10 @@ export default {
     ItemPage,itemOne,itemTwo,itemThree,itemFour,itemMap,itemFive,itemVolunteer,itemWorker,itemOlderAge
   },
   methods:{
+    send1(){
+      console.log("发送")
+      this.input='发送'
+    },
     showMessageFromChild(data){
       console.log(data);
       if (data.modname=="KNN"){

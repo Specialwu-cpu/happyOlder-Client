@@ -13,11 +13,10 @@ export default {
     return{
       datas:{'value1':this.msg},
       modname:[],
-      acc:[],
-      ppv:[],
-      trp:[],
-      f1:[],
-      id:[],
+      happy:[],
+      interaction:[],
+      unknow:[],
+      fall:[],
       times:0,
       child:'child',
       chart:{}
@@ -29,25 +28,42 @@ export default {
       try {
         // const response = await axios.get('YOUR_API_ENDPOINT'); // 发送异步请求
         // 更新图表数据
-        if(this.times<8){
-          for (var i=0;i<6;i++){
-            this.modname[i]="2023-07-0"+i.toString()
-            this.acc[i]=this.acc[i]*0.9
-            this.ppv[i]=this.ppv[i]*0.8
-            this.trp[i]=this.trp[i]*0.7
-            this.f1[i]=this.f1[i]*0.8
+        axios({
+          method:"get",
+          headers:{
+            'Content-Type':'application/json',
+          },
+          url:"http://43.143.150.4:8010/event/get_number/"
+        }).then(res => {
+          console.log(res)
+          this.modname = Object.keys(res.data);
+          for(let i=0; i<this.modname.length; i++){
+            this.happy.push(res.data[this.modname[i]]["老人笑了"])
+            this.interaction.push(res.data[this.modname[i]]["义工交互"])
+            this.fall.push(res.data[this.modname[i]]["摔倒"])
+            this.unknow.push(res.data[this.modname[i]]["陌生人"])
           }
-          this.times++;
-        }else {
-          for (var i=0;i<6;i++) {
-            this.modname[i] = "2023-07-0" + i.toString()
-            this.acc[i] = 0.1
-            this.ppv[i] = 0.9
-            this.trp[i] = 0.7
-            this.f1[i] = 0.5
-          }
-          this.times=0;
-        }
+          console.log(this.happy)
+        })
+        // if(this.times<8){
+        //   for (var i=0;i<6;i++){
+        //     this.modname[i]="2023-07-0"+i.toString()
+        //     this.happy[i]=this.happy[i]*0.9
+        //     this.interaction[i]=this.interaction[i]*0.8
+        //     this.unknow[i]=this.unknow[i]*0.7
+        //     this.fall[i]=this.fall[i]*0.8
+        //   }
+        //   this.times++;
+        // }else {
+        //   for (var i=0;i<6;i++) {
+        //     this.modname[i] = "2023-07-0" + i.toString()
+        //     this.happy[i] = 0.1
+        //     this.interaction[i] = 0.9
+        //     this.unknow[i] = 0.7
+        //     this.fall[i] = 0.5
+        //   }
+        //   this.times=0;
+        // }
         this.updateChart(); // 更新图表
       } catch (error) {
         console.error('请求错误:', error);
@@ -85,22 +101,22 @@ export default {
           {
             name:'开心',
             type: 'bar',
-            data: this.acc
+            data: this.happy
           },
           {
             name:'义工交互',
             type: 'bar',
-            data: this.ppv
+            data: this.interaction
           },
           {
             name:'陌生人闯入',
             type: 'bar',
-            data: this.trp
+            data: this.unknow
           },
           {
             name:'摔倒',
             type: 'bar',
-            data: this.f1
+            data: this.fall
           },
         ]
       };
@@ -108,18 +124,7 @@ export default {
       this.chart.setOption(option);
     },
   },
-  created() {
-      // this.datas=res.data;
-      // this.datas.value1=this.msg
-      this.datas=this.msg
-      // for (var i=0;i<4;i++){
-      //   this.modname[i]="2023-07-0"+i.toString()
-      //   this.acc[i] = 0.1
-      //   this.ppv[i] = 0.9
-      //   this.trp[i] = 0.7
-      //   this.f1[i] = 0.5
-      // }
-  },
+
   mounted() {
     this.fetchData(); // 首次加载数据
     this.timer = setInterval(this.fetchData, 500); // 定时器，每隔5秒请求数据更新图表
